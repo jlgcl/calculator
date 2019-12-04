@@ -6,15 +6,73 @@ body {
 
 .frame {
     background-color: rgb(37, 35, 35);
-    margin-top: 15%;
-    margin-left: 40%;
-    padding: 50px;
+    margin-top: 10%;
+    margin-left: 35%;
+    display: flex;
+    padding: 100px;
     border-radius: 25px;
     display: inline-block;
     width: 100px;
 }
 
-.frame #display {
+#display {
     background-color: rgb(212, 182, 182);
-    padding: 5px, 15px;
+    padding: 10px;
+    width: 200px;
+    height: 50px;
+    margin-left: -70px;
+    margin-top: -30px;
+    border-style: solid;
+    border-color: rgb(160, 147, 147);
+    border-width: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+button {
+    padding: 30px, 5px;
+    display: inline-block;
+    align-content: center;
+    background-color: rgb(223, 162, 50);
+    border-color: rgb(223, 162, 50);
+    border-style: solid;
+    border-radius: 2px;
+    margin: 2px 5px;
+    text-align: center;
+    width: 30px;
+    height: 20px;
+    margin-left:25px;
+}
+
+/* id = row 2; class is "row", not including 2*/
+.row {
+    width: 300%;
+    display: flex;
+    margin-left: -52px;
+}
+
+.frame .numButtons {
+    margin-top: 40%;
+}
+
+.opButtons {
+    width: 300%;
+    display: flex;
+    margin-left: -23px;
+    margin-top: 10px;
+}
+
+.opButtons button {
+    padding: 50px, 5px;
+    display: inline-block;
+    align-content: center;
+    background-color: rgb(223, 162, 50);
+    border-color: rgb(223, 162, 50);
+    border-style: solid;
+    border-radius: 2px;
+    margin: 2px 5px;
+    text-align: center;
+    width: 30px;
+    height: 20px;
+    margin-left:2px;
 }
