@@ -11,7 +11,7 @@ STATUS:
     Store displayed values, then display operation, then answer at bottom line (may need to create another div for results).
     - pass operation condition to/from operator function - COMPLETED.
         - can't read operator() condition - SOLVED.
-    - implement reset display after result is shown.
+    - implement reset display after result is shown - COMPLETED.
     - implement backspace - most likely call function for arr.
 
 LEARNED:
@@ -19,6 +19,12 @@ LEARNED:
     - try to initialize getElements at the beginning of the code.
     - INSPIRED BY OTHER CODES: whether I'm on the right track, use of functions.
     - Use pseudocode to design the program first.
+    - STRUGGLED:
+        - event listeners initially declared within numID.forEach(e) method, so when trying to add backspace function using
+        arr2.substr(0, arr2.length-1) OR arr.pop(), original arr2 & arr didn't change, or caused issues (deleted all array/string).
+        To avoid this problem, declare array/string variables outside the method, assign/change values within the method, then 
+        we can change the values of the variables outside the method as well. The issue was correlated to the fact that values
+        were forced to change everytime a number from numID array event listener was clicked, which conflicted with other eventlisteners.
 
 */
 
@@ -27,6 +33,7 @@ var opBut = document.getElementsByClassName("opButtons");
 var disp = document.getElementById("display");
 var clr = document.getElementById("AC");
 var eql = document.getElementById("equals");
+var bk = document.getElementById("back");
 
 //let numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 let numID = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "plus", "subtract", "mult", "divide"];
@@ -76,6 +83,9 @@ let operator = function(num1, num2, op) {
 let perform = function () {
 
     let arr = [];
+    let arr2 = "";
+    let arr3 = [];
+    let arr3Num = [];
     let arr4 = [];
     
     /* PSEUDOCODE:
@@ -95,7 +105,7 @@ let perform = function () {
             /*if (e == "one") {
                 changeDisplay(1);
             }*/
-
+       
             //STUCK: display text contents of each id to obtain numbers; currently below codes return "undefined"; SOLVED: use getElementByID(e).textContent.
             let cont = document.getElementById(e).textContent;
             let contInt = parseInt(cont);
@@ -110,35 +120,54 @@ let perform = function () {
                 arr4[0] = cont;        //just for operator: ["operator"].
             }
 
-            arr2 = arr.join("");    //joining purely for display purpose. [num, "operator", num].
+            arr2 = arr.join("");    //joining to string purely for display purpose. [num, "operator", num] -> "num, operator, num".
+
             arr3 = arr2.split(/[^0-9]/g);   //splitting before and after the operator in the array; but splitted into strings: ["number", "number"].
             arr3Num = arr3.map(Number);     //NEW METHOD; convert the splitted strings into numbers; partInt method, but for all elements in an array: [number, number];
-           
-            //clear the field
-            clr.addEventListener("click", function() {
-                arr = [];
-                changeDisplay(arr);
-            });
-
-            eql.addEventListener("click", function() {
-                //operator(arr[0], arr[2], arr[1])
-                changeDisplay(operator(arr3Num[0], arr3Num[1], arr4[0]));    //NOT changeDisplay(operator());
-            })
 
             changeDisplay(arr2);
+
         })
         
     })
+
+    //IMPORTANT!!!: below event listeners can be outside the numID.forEach(e) method because the variables used are declared outside the method as well!
+
+    //backspace; must be outside numID.forEach(e) to change the arr without clicking any numbers.
+    //struggled with display due to variable declarations; 
+    bk.addEventListener("click", function() {
+        arr.pop();
+        arr2 = arr2.substr(0, arr2.length-1);   //for display
+        changeDisplay(arr2);
+    })
+                
+    //clear the field; can be inside numID.forEach(e) or outside, since not passing any variables from inside numID.forEach(e).
+    clr.addEventListener("click", function() {
+        arr = [];
+        changeDisplay(arr);
+    });
+
+
+    //below can't be outside numID.forEach(e) since operator() is passing variables declared within the forEach method.
+    eql.addEventListener("click", function() {
+        //operator(arr[0], arr[2], arr[1])
+        changeDisplay(operator(arr3Num[0], arr3Num[1], arr4[0]));    //NOT changeDisplay(operator());
+        arr = [];   //reset the array/display.
+    })
+
 }
 
 function changeDisplay(num) {
     disp.textContent = num;
 }
 
-//implement later
+//implement
+/* Doesn't work using below function.
 function backSpace(num) {
-    num.pop();
+    num.substring(0, num.length-1);
+    return num;
 }
+*/
 
 //create a function for clearing display line(s).
 

@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(90, 80, 80);
+    background-color: rgb(206, 190, 190);
     font-family: arial, sans-serif;
     font-size: 15px;
 }
@@ -13,6 +13,13 @@ body {
     border-radius: 25px;
     display: inline-block;
     width: 100px;
+    box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.25);
+    content: '';
+    display: block;
+    left: 0;
+    position: absolute;
+    top: 0;
+    z-index: -1;
 }
 
 #display {
@@ -27,6 +34,8 @@ body {
     border-width: 10px;
     border-radius: 5px;
     text-decoration: none;
+    font-family: "arial";
+    font-size: 20px;
 }
 
 button {
@@ -74,5 +83,13 @@ button {
     text-align: center;
     width: 30px;
     height: 20px;
-    margin-left:2px;
+    margin-left: 2px;
+}
+
+button:hover{
+  transform: scale(1.2);
+}
+
+button:active {
+  transform: scale(1.0);
 }
