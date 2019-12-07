@@ -25,6 +25,10 @@ LEARNED:
         To avoid this problem, declare array/string variables outside the method, assign/change values within the method, then 
         we can change the values of the variables outside the method as well. The issue was correlated to the fact that values
         were forced to change everytime a number from numID array event listener was clicked, which conflicted with other eventlisteners.
+        So the bottom line is: don't nest an eventlistener within another unless required, and keep initialize variables outside the eventlisteners
+        if they are to be used for other listeners too.
+    - used RegEx for filtering numbers, dots from operators.
+    - it's always helpful to comment beside each code to see what the resulting result will be.
 
 */
 
@@ -34,9 +38,10 @@ var disp = document.getElementById("display");
 var clr = document.getElementById("AC");
 var eql = document.getElementById("equals");
 var bk = document.getElementById("back");
+var dot = document.getElementById("dot"); //not necessary initialization
 
 //let numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-let numID = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "plus", "subtract", "mult", "divide"];
+let numID = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "plus", "subtract", "mult", "divide", "dot"];
 
 
 let add = function(num1, num2) {
@@ -114,17 +119,18 @@ let perform = function () {
             //ISSUE: with if (arr.length < 3), display only takes in specified digit length below. SOLVED: remove if statement that limits input.
             //STUCK: push two numbers to array. SOLVED: join, split, then partInt the array elements.
             if (Number.isInteger(contInt)) {
-                arr.push(contInt);      
+                arr.push(contInt);     // arr = [1, ., 3, 4]
             } else {
-                arr.push(cont);
-                arr4[0] = cont;        //just for operator: ["operator"].
+                arr.push(cont);         // arr = [1, ., 3, "+", 4]
+                arr4[0] = cont;        //just for operator: ["operator"]; arr4 = ["+"]
             }
 
             arr2 = arr.join("");    //joining to string purely for display purpose. [num, "operator", num] -> "num, operator, num".
-
-            arr3 = arr2.split(/[^0-9]/g);   //splitting before and after the operator in the array; but splitted into strings: ["number", "number"].
+                                    // arr2 = ["1.3+4"]
+            arr3 = arr2.split(/[^0-9\-.]/g);   //splitting before and after the operator in the array; but splitted into strings: ["number", "number"].
+                                            //arr3 = ["1.3", "4"]
             arr3Num = arr3.map(Number);     //NEW METHOD; convert the splitted strings into numbers; partInt method, but for all elements in an array: [number, number];
-
+                                            //arr3Num = [1.3, 4]
             changeDisplay(arr2);
 
         })
@@ -136,9 +142,7 @@ let perform = function () {
     //backspace; must be outside numID.forEach(e) to change the arr without clicking any numbers.
     //struggled with display due to variable declarations; 
     bk.addEventListener("click", function() {
-        arr.pop();
-        arr2 = arr2.substr(0, arr2.length-1);   //for display
-        changeDisplay(arr2);
+        backSpace(arr, arr2);
     })
                 
     //clear the field; can be inside numID.forEach(e) or outside, since not passing any variables from inside numID.forEach(e).
@@ -155,6 +159,13 @@ let perform = function () {
         arr = [];   //reset the array/display.
     })
 
+}
+
+function backSpace(arr, arr2) {
+    arr.pop();
+    arr2 = arr2.substr(0, arr2.length-1);   //for display
+
+    changeDisplay(arr2);
 }
 
 function changeDisplay(num) {
