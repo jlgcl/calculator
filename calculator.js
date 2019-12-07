@@ -12,7 +12,9 @@ STATUS:
     - pass operation condition to/from operator function - COMPLETED.
         - can't read operator() condition - SOLVED.
     - implement reset display after result is shown - COMPLETED.
-    - implement backspace - most likely call function for arr.
+    - implement backspace - most likely call function for arr. - COMPLETED.
+    - implement floating number inputs - COMPLETED.
+    - implement keyboard inputs - OPTIONAL.
 
 LEARNED:
     - functions are mainly used to simplify code.
@@ -29,6 +31,8 @@ LEARNED:
         if they are to be used for other listeners too.
     - used RegEx for filtering numbers, dots from operators.
     - it's always helpful to comment beside each code to see what the resulting result will be.
+    - important to push only operators to arr4, not "." - do separate if statement.
+    - Debug using console.log to see which inputs are which and whether they are expected at that stage.
 
 */
 
@@ -43,46 +47,48 @@ var dot = document.getElementById("dot"); //not necessary initialization
 //let numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 let numID = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "plus", "subtract", "mult", "divide", "dot"];
 
-
-let add = function(num1, num2) {
-    let result = num1 + num2;
-    return result;
+/* OPTIONAL FUNCTIONS
+let add = function(p1, p2) {
+    let result = p1 + p2;
+    return result.toFixed(5);
 }
 
 let subtract = function(num1, num2) {
     let result = num1 - num2;
-    return result;
+    return result.toFixed(5);
 }
 
 let multiply = function(num1, num2) {
     let result = num1 * num2;
-    return result;
+    return result.toFixed(5);
 }
 
 let divide = function(num1, num2) {
     let result = num1 / num2;
-    return result;
+    return result.toFixed(5);
 }
+*/
 
 let operator = function(num1, num2, op) { 
+
+    let p1 = parseFloat(num1);
+    let p2 = parseFloat(num2);
  
-    if (op == "+") {    //tried if(op.include("+") == true) approach, but this is more functional.
-        return add(num1, num2);
-        //return result as display on result-display line; call changeDisplay(answer).
+    switch (op) {
+        case "+":
+            return (p1 + p2).toFixed(5);
+        break;
+        case "-":
+            return (p1 - p2).toFixed(5);
+        break;
+        case "X":
+            return (p1 * p2).toFixed(5);
+        break;
+        case "/":
+            return (p1 / p2).toFixed(5);
+        break;
     }
-    
-    if (op == "-") {
-        return subtract(num1, num2);
-    }
-    
-    if (op == "X") {
-        return multiply(num1, num2);
-    }
-    
-    if (op == "/") {
-        return divide(num1, num2);
-    }
-    
+
 }
 
 let perform = function () {
@@ -119,18 +125,21 @@ let perform = function () {
             //ISSUE: with if (arr.length < 3), display only takes in specified digit length below. SOLVED: remove if statement that limits input.
             //STUCK: push two numbers to array. SOLVED: join, split, then partInt the array elements.
             if (Number.isInteger(contInt)) {
-                arr.push(contInt);     // arr = [1, ., 3, 4]
+                arr.push(contInt);     // arr = [1, 3, 4, 4]
             } else {
-                arr.push(cont);         // arr = [1, ., 3, "+", 4]
+                arr.push(cont);         // arr = [1, ".", 3, "+", 4, ".", 4]
+            }
+            // IMPORTANT: condition to include operator EXCLUDING "." non-number.
+            if (cont == "+" || cont == "-" || cont == "X" || cont == "/") {
                 arr4[0] = cont;        //just for operator: ["operator"]; arr4 = ["+"]
             }
 
             arr2 = arr.join("");    //joining to string purely for display purpose. [num, "operator", num] -> "num, operator, num".
-                                    // arr2 = ["1.3+4"]
+                                    // arr2 = ["1.3+4.4"]
             arr3 = arr2.split(/[^0-9\-.]/g);   //splitting before and after the operator in the array; but splitted into strings: ["number", "number"].
-                                            //arr3 = ["1.3", "4"]
+                                            //arr3 = ["1.3", "4.4"]
             arr3Num = arr3.map(Number);     //NEW METHOD; convert the splitted strings into numbers; partInt method, but for all elements in an array: [number, number];
-                                            //arr3Num = [1.3, 4]
+                                            //arr3Num = [1.3, 4.4]
             changeDisplay(arr2);
 
         })
@@ -142,7 +151,10 @@ let perform = function () {
     //backspace; must be outside numID.forEach(e) to change the arr without clicking any numbers.
     //struggled with display due to variable declarations; 
     bk.addEventListener("click", function() {
-        backSpace(arr, arr2);
+        arr.pop();
+        arr2 = arr2.substr(0, arr2.length-1);   //for display
+    
+        changeDisplay(arr2);
     })
                 
     //clear the field; can be inside numID.forEach(e) or outside, since not passing any variables from inside numID.forEach(e).
@@ -155,17 +167,15 @@ let perform = function () {
     //below can't be outside numID.forEach(e) since operator() is passing variables declared within the forEach method.
     eql.addEventListener("click", function() {
         //operator(arr[0], arr[2], arr[1])
-        changeDisplay(operator(arr3Num[0], arr3Num[1], arr4[0]));    //NOT changeDisplay(operator());
+        
+        changeDisplay(operator(arr3[0], arr3[1], arr4[0]));    //NOT changeDisplay(operator());
         arr = [];   //reset the array/display.
     })
 
 }
 
 function backSpace(arr, arr2) {
-    arr.pop();
-    arr2 = arr2.substr(0, arr2.length-1);   //for display
-
-    changeDisplay(arr2);
+    //not used function, if called inside event listeners, it will only get rid of one digit.
 }
 
 function changeDisplay(num) {
@@ -183,3 +193,4 @@ function backSpace(num) {
 //create a function for clearing display line(s).
 
 perform();
+console.log(operator());
