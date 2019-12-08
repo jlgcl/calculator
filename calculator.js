@@ -172,8 +172,11 @@ let perform = function () {
     eql.addEventListener("click", function() {
         //operator(arr[0], arr[2], arr[1])
         
-        changeDisplay(operator(arr3[0], arr3[1], arr4[0]));    //NOT changeDisplay(operator());
-        arr = [];   //reset the array/display.
+        let results = operator(arr3[0], arr3[1], arr4[0]);
+        changeDisplay(results);    //NOT changeDisplay(operator());
+        arr = [];
+        arr[0] = results;
+        //arr = [];   //reset the array/display.
         
     })
 
