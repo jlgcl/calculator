@@ -4,6 +4,9 @@ APPROACH:
     1) inside operator(num1, num2), I must have condition: if a operator key is pressed, perform any of operation.
     2) create a function that translates key/button entry to display & store values.
 
+SCOPE:
+    - project is to only include 2 numbers as inputs. Additional inputs are doable through .eval() method.
+
 METHODS:
     1) onclick at HTML buttons?
 
@@ -73,19 +76,19 @@ let operator = function(num1, num2, op) {
 
     let p1 = parseFloat(num1);
     let p2 = parseFloat(num2);
- 
+
     switch (op) {
         case "+":
-            return (p1 + p2).toFixed(5);
+            return (p1 + p2).toFixed(2);
         break;
         case "-":
-            return (p1 - p2).toFixed(5);
+            return (p1 - p2).toFixed(2);
         break;
         case "X":
-            return (p1 * p2).toFixed(5);
+            return (p1 * p2).toFixed(2);
         break;
         case "/":
-            return (p1 / p2).toFixed(5);
+            return (p1 / p2).toFixed(2);
         break;
     }
 
@@ -96,7 +99,7 @@ let perform = function () {
     let arr = [];
     let arr2 = "";
     let arr3 = [];
-    let arr3Num = [];
+    let arr3Num = [];   //unnecessary
     let arr4 = [];
     
     /* PSEUDOCODE:
@@ -136,11 +139,12 @@ let perform = function () {
 
             arr2 = arr.join("");    //joining to string purely for display purpose. [num, "operator", num] -> "num, operator, num".
                                     // arr2 = ["1.3+4.4"]
-            arr3 = arr2.split(/[^0-9\-.]/g);   //splitting before and after the operator in the array; but splitted into strings: ["number", "number"].
+            arr3 = arr2.split(/[^0-9\.]/g);   //splitting before and after the operator in the array; but splitted into strings: ["number", "number"].
                                             //arr3 = ["1.3", "4.4"]
             arr3Num = arr3.map(Number);     //NEW METHOD; convert the splitted strings into numbers; partInt method, but for all elements in an array: [number, number];
                                             //arr3Num = [1.3, 4.4]
             changeDisplay(arr2);
+
 
         })
         
@@ -170,6 +174,7 @@ let perform = function () {
         
         changeDisplay(operator(arr3[0], arr3[1], arr4[0]));    //NOT changeDisplay(operator());
         arr = [];   //reset the array/display.
+        
     })
 
 }
